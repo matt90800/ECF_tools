@@ -2,6 +2,7 @@
 class User {
     private $id;
     private $username;
+    private String $password;
     private $points;
     private $ownedItems;
 
@@ -19,6 +20,12 @@ class User {
     public function getUsername() {
         return $this->username;
     }
+
+    public function getPassword():String
+    {
+        return $this->password;
+    }
+
 
     public function getPoints() {
         return $this->points;
@@ -38,6 +45,11 @@ class User {
 
     public function setUsername($username) {
         $this->username = $username;
+    }
+    
+    public function setPassword($password)
+    {
+        $this->password = $password;
     }
 
     public function setPoints($points) {
