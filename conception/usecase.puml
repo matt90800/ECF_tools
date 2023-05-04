@@ -1,0 +1,34 @@
+@startuml
+
+left to right direction
+
+actor Utilisateur as User
+actor Administrateur as Admin
+
+rectangle "Gestion des Biens" {
+  usecase "Consulter les biens disponibles" as UC1
+  usecase "Effectuer une réservation" as UC2
+}
+
+rectangle "Espace Utilisateur" {
+  usecase "Consulter ses points" as UC3
+  usecase "Consulter ses biens enregistrés" as UC4
+  usecase "Ajouter de nouveaux biens à prêter" as UC5
+  usecase "Suivre les prêts en cours" as UC6
+}
+
+rectangle "Partie d'Administration" {
+  usecase "Ajouter des catégories" as UC7
+  usecase "Gérer les utilisateurs" as UC8
+}
+
+User --> UC1 : <<utilise>>
+User --> UC2 : <<utilise>>
+User --> UC3 : <<utilise>>
+User --> UC4 : <<utilise>>
+User --> UC5 : <<utilise>>
+User --> UC6 : <<utilise>>
+Admin --> UC7 : <<utilise>>
+Admin --> UC8 : <<utilise>>
+
+@enduml
