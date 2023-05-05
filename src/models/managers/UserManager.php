@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /* require_once 'connect.php';
 require_once './Model/Entities/User.php'; */
@@ -10,32 +10,34 @@ class UserManager{
         $pdo = DatabaseConnection::getConnection();
         $sql = "SELECT * FROM users";
         $stmt= $pdo->prepare($sql);// on utilise la methode prepare de l'objet PDO; On récupère un objet PDOStatement
-        $stmt->execute();// on exécute le statement 
+        $stmt->execute();// on exécute le statement
         $results = $stmt->fetchAll(PDO::FETCH_CLASS, 'User'); //on récupère les données sous la forme d'une classe User
         return $results;
     }
 
-    public static function insertUser(String $pseudo, String $password)
+    public static function insertUser(String $name, string $firstname, string $email, String $password)
     {
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT); 
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         $pdo = DatabaseConnection::getConnection();
-        $sql = "INSERT INTO users (pseudo, password) VALUES (:pseudo, :password)";
-        $stmt = $pdo->prepare($sql); 
-        $stmt->bindParam(':pseudo', $pseudo);
+        $sql = "INSERT INTO users (lastname,firstname,email, password) VALUES (:name,:firstname,:email, :password)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':firstname', $firstname);
+        $stmt->bindParam(':email', $email);
         $stmt->bindParam(':password', $hashedPassword);
         $stmt->execute();
         $newUser = $pdo->lastInsertId();
         return $newUser;
     }
 
-    public static function connectUser($pseudo, $password)
+    public static function connectUser($name, $password)
     {
         $pdo = DatabaseConnection::getConnection();
-        $sql = "SELECT * FROM users WHERE pseudo= :pseudo";
+        $sql = "SELECT * FROM users WHERE name= :name ;
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':pseudo', $pseudo);
+        $stmt->bindParam(':name', $name);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Users');
         $user = $stmt->fetch();
         if($user) {
             $registeredPassword = $user->getPassword();
@@ -44,7 +46,7 @@ class UserManager{
                 session_start(); //on lance la session avec session
                 $_SESSION['user'] = [
                     'id' => $user->getId(),
-                    'pseudo' => $user->getPseudo()
+                    'name' => $user->getName()
                 ];
             }
         }else{

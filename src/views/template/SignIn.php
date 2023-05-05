@@ -5,9 +5,9 @@ $form="index.php"; /* variable php pour définir le HREF de créer un contact */
 require_once("./views/partials/Header.php"); ?>  
 <div class="container">
     <h2>Sign In</h2>
-    <form action="login.php" method="POST">
+    <form action="" method="POST">
       <div class="form-group">
-        <label for="username">Username</label>
+        <label for="username">Username or email</label>
         <input type="text" id="username" name="username" required>
       </div>
       <div class="form-group">

@@ -1,2 +1,3 @@
 INSERT INTO role (name) VALUES
-('admin');
+('admin'),
+('user');
