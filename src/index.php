@@ -1,4 +1,5 @@
 <?php
+$devLog=!true;
 
 // Autoloading des classes
 function myAutoloader($class_name)
@@ -19,14 +20,20 @@ function myAutoloader($class_name)
 // Enregistrez la fonction d'autoloading
 spl_autoload_register('myAutoloader');
 
-echo '<pre>';
-var_dump($_GET);
-echo '</pre>';
-
-
-echo '<pre>';
-print_r($_POST);
-echo '</pre>';
+session_start()? "" : print("Connection echouée"); //on lance la session avec session
+if ($devLog){
+    echo '<pre>';
+    var_dump($_SESSION);
+    echo '</pre>';
+    
+    echo '<pre>';
+    var_dump($_GET);
+    echo '</pre>';
+    
+    echo '<pre>';
+    print_r($_POST);
+    echo '</pre>';
+}
 
 if (!empty($_GET)){
     $action = $_GET['action'];
@@ -34,7 +41,7 @@ if (!empty($_GET)){
         case 'signin':
             Connection::displaySignIn();
             if (isset($_POST['username'])&&isset($_POST['password'])){
-                UserManager::connectUser($_POST['username'], $_POST['password']);
+                Connection::logUser($_POST['username'], $_POST['password']);
             }
             break;
             case 'signup':
@@ -44,11 +51,11 @@ if (!empty($_GET)){
                 isset($_POST['firstname']) &&
                 isset($_POST['email'])&&
                 isset($_POST['password']) ) {
-                UserManager::insertUser($_POST['lastname'], $_POST['firstname'], $_POST['email'],$_POST['password']);
+                Connection::createUser($_POST['lastname'], $_POST['firstname'], $_POST['email'],$_POST['password']);
             }
             break;
         case 'logout':
-            //logout();
+            Connection::logOut();
             break;
         case 'add':
             //addContact();
@@ -61,33 +68,10 @@ if (!empty($_GET)){
 
             break;
         }
-//} else if (!empty($_POST)){
-//        $action = $_POST['action'];
-//        var_dump($action);
-//    switch($action){
-//        case 'signin':
-//            Connection::displaySignIn();
-//            break;
-//            case 'signup':
-//            Connection::displaySignUp();
-//            break;
-//        case 'logout':
-//            //logout();
-//            break;
-//        case 'add':
-//            //addContact();
-//        case 'show':
-///*             if(!empty($_GET['id'])){
-//                $id = $_GET['id'];
-//                showContact($id);
-//            }*/
-//        default:
-
-//            break;
-//        }
 
 
-//} else {
+
+} else {
     Home::displayHome();
 }
 

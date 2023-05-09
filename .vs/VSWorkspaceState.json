@@ -1,6 +1,14 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\sql",
+    "\\src",
+    "\\src\\controllers",
+    "\\src\\models",
+    "\\src\\models\\entities",
+    "\\src\\models\\managers",
+    "\\src\\views",
+    "\\src\\views\\template"
   ],
   "PreviewInSolutionExplorer": false
 }

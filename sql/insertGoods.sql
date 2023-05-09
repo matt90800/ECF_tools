@@ -1,4 +1,4 @@
-INSERT INTO users (pseudo,lastname, firstname,password, email, earned_points, id_role) VALUES
+INSERT INTO good (name,visual,description,points,id_category,id_users) VALUES
 ('johnny','Doe', 'John','', 'john.doe@example.com', 100, 1);
 --
 INSERT INTO users (lastname, firstname,password, email, earned_points, id_role) VALUES

@@ -1,7 +1,7 @@
 <?php
 
 /* require_once 'connect.php';
-require_once './Model/Entities/User.php'; */
+require_once './Models/Entities/Users.php';*/
 
 class UserManager{
 
@@ -30,27 +30,31 @@ class UserManager{
         return $newUser;
     }
 
-    public static function connectUser($name, $password)
-    {
+    public static function connectUser($name, $password) {
         $pdo = DatabaseConnection::getConnection();
-        $sql = "SELECT * FROM users WHERE name= :name ;
+        $sql = "SELECT id, pseudo, lastname, firstname, password, email,earned_points, id_role FROM users WHERE lastname= :name" ;
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':name', $name);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Users');
-        $user = $stmt->fetch();
+        $result = $stmt->fetch();
+        //on ne peux pas utliser fetchClass avec un constructeur défini ??
+        $user = new Users($result['id'], $result['pseudo'], $result['lastname'], $result['firstname'], $result['password'], $result['email'], $result['earned_points'], $result['id_role']);
         if($user) {
             $registeredPassword = $user->getPassword();
             $verifiedUser = password_verify($password, $registeredPassword);
             if($verifiedUser){
-                session_start(); //on lance la session avec session
+//                session_start()? print('Bienvenue') : print("Connection echouée"); //on lance la session avec session
                 $_SESSION['user'] = [
                     'id' => $user->getId(),
-                    'name' => $user->getName()
+                    'name' => $user->getLastName()
                 ];
             }
-        }else{
+        } else {
             return false;
         }
+    }
+
+    public static function disconnectUser(/* $name */) {
+        unset($_SESSION['user']);
     }
 }

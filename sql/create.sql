@@ -1,51 +1,51 @@
--- CREATE DATABASE ECF_tools_mb;
+--CREATE DATABASE ECF_tools_mb;
 
-CREATE TABLE role(
-   Id_role SERIAL,
+CREATE TABLE IF NOT EXISTS role(
+   id SERIAL,
    name VARCHAR(50)  NOT NULL UNIQUE,
-   PRIMARY KEY(Id_role)
+   PRIMARY KEY(id)
 );
 
-CREATE TABLE category(
-   Id_category SERIAL,
+CREATE TABLE IF NOT EXISTS category(
+   id SERIAL,
    name VARCHAR(50) ,
-   PRIMARY KEY(Id_category)
+   PRIMARY KEY(id)
 );
 
-CREATE TABLE users(
-   id_users SERIAL,
+CREATE TABLE IF NOT EXISTS users(
+   id SERIAL,
    pseudo VARCHAR(50),
    lastname VARCHAR(50)  NOT NULL,
    firstname VARCHAR(50)  NOT NULL,
    password VARCHAR(255)  NOT NULL UNIQUE,	--password UNIQUE avec le hash ?
    email VARCHAR(255)  NOT NULL,
    earned_points SMALLINT,
-   Id_role INTEGER,
-   PRIMARY KEY(Id_users),
+   id_role INTEGER,
+   PRIMARY KEY(id),
    UNIQUE(email),
-   FOREIGN KEY(Id_role) REFERENCES role(Id_role)
+   FOREIGN KEY(id_role) REFERENCES role(id)
 );
 
-CREATE TABLE good(
-   Id_good SERIAL,
+CREATE TABLE IF NOT EXISTS good(
+   id SERIAL,
    name VARCHAR(50)  NOT NULL,
    visual VARCHAR(255) ,
    description TEXT,
    points SMALLINT NOT NULL,
-   Id_category INTEGER,
-   Id_user INTEGER NOT NULL,
-   PRIMARY KEY(Id_good),
-   FOREIGN KEY(Id_category) REFERENCES category(Id_category),
-   FOREIGN KEY(id_users) REFERENCES person(id_users)
+   id_category INTEGER,
+   id_users INTEGER NOT NULL,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_category) REFERENCES category(id),
+   FOREIGN KEY(id_users) REFERENCES users(id)
 );
 
-CREATE TABLE lend(
-   Id_lend SERIAL,
+CREATE TABLE IF NOT EXISTS lend(
+   id SERIAL,
    begining_date DATE NOT NULL,
    end_date DATE NOT NULL,
    id_users INTEGER NOT NULL,
-   Id_good INTEGER NOT NULL,
-   PRIMARY KEY(Id_lend),
-   FOREIGN KEY(id_users) REFERENCES person(id_users),
-   FOREIGN KEY(Id_good) REFERENCES good(Id_good)
+   id_good INTEGER NOT NULL,
+   PRIMARY KEY(id),
+   FOREIGN KEY(id_users) REFERENCES users(id),
+   FOREIGN KEY(id_good) REFERENCES good(id)
 );

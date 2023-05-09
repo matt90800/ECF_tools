@@ -9,8 +9,19 @@ class Connection {
         require_once('./views/template/SignUp.php');
     }
 
-    static function logUser(){
-            $user = UserManager::connectUser($_POST['pseudo'], $_POST['password']);
+    static function createUser($lastName,$firstName,$email,$password){
+        UserManager::insertUser($_POST['lastname'], $_POST['firstname'], $_POST['email'],$_POST['password']);
+    }
+
+    static function logUser($username,$password){
+        $user = UserManager::connectUser($_POST['pseudo'], $_POST['password']);
+        header("location:index.php");
+    }
+
+    static function logOut(){
+        UserManager::disconnectUser();
+        header("location:index.php");
+
     }
 
 }
