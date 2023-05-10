@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS users(
    FOREIGN KEY(id_role) REFERENCES role(id)
 );
 
-CREATE TABLE IF NOT EXISTS good(
+CREATE TABLE IF NOT EXISTS tool(
    id SERIAL,
    name VARCHAR(50)  NOT NULL,
    visual VARCHAR(255) ,
@@ -44,8 +44,8 @@ CREATE TABLE IF NOT EXISTS lend(
    begining_date DATE NOT NULL,
    end_date DATE NOT NULL,
    id_users INTEGER NOT NULL,
-   id_good INTEGER NOT NULL,
+   id_tool INTEGER NOT NULL,
    PRIMARY KEY(id),
    FOREIGN KEY(id_users) REFERENCES users(id),
-   FOREIGN KEY(id_good) REFERENCES good(id)
+   FOREIGN KEY(id_tool) REFERENCES tool(id)
 );

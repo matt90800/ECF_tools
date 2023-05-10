@@ -1,4 +1,5 @@
 <?php
+
 $devLog=!true;
 
 // Autoloading des classes
@@ -39,31 +40,51 @@ if (!empty($_GET)){
     $action = $_GET['action'];
     switch($action){
         case 'signin':
-            Connection::displaySignIn();
+            ConnectionController::displaySignIn();
             if (isset($_POST['username'])&&isset($_POST['password'])){
-                Connection::logUser($_POST['username'], $_POST['password']);
+                ConnectionController::logUser($_POST['username'], $_POST['password']);
             }
             break;
             case 'signup':
-            Connection::displaySignUp();
+            ConnectionController::displaySignUp();
             if (
                 isset($_POST['lastname']) &&
                 isset($_POST['firstname']) &&
                 isset($_POST['email'])&&
                 isset($_POST['password']) ) {
-                Connection::createUser($_POST['lastname'], $_POST['firstname'], $_POST['email'],$_POST['password']);
+                ConnectionController::createUser($_POST['lastname'], $_POST['firstname'], $_POST['email'],$_POST['password']);
             }
             break;
         case 'logout':
-            Connection::logOut();
+            ConnectionController::logOut();
             break;
-        case 'add':
-            //addContact();
+        case 'create':
+            ToolController::displayToolCreationForm();
+            if (
+                isset($_POST['nom']) &&
+                isset($_POST['description']) &&
+                isset($_POST['points'])&&
+                isset($_POST['category']) ) {
+                ToolController::createTool(
+                    $_POST['nom'], 
+                    $_POST['description'],
+                    $_POST['points'],
+                    $_POST['category'],
+                    $_SESSION['user']['id']
+                    );
+            }
+        case 'update':
+            
+            
+        case 'delete':
+            ToolManager::deleteTool($_GET['object']);
+            header("location:/");
+  
         case 'show':
-/*             if(!empty($_GET['id'])){
+             if(!empty($_GET['id'])){
                 $id = $_GET['id'];
-                showContact($id);
-            }*/
+                ToolController::displayTool($id);
+            }
         default:
 
             break;
@@ -72,7 +93,7 @@ if (!empty($_GET)){
 
 
 } else {
-    Home::displayHome();
+    HomeController::displayHome();
 }
 
 

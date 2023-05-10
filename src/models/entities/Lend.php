@@ -4,13 +4,13 @@ class Lend {
     private $beginingDate;
     private $endDate;
     private $idUser;
-    private $idGood;
+    private $good;
 
-    public function __construct($id, $beginingDate, $endDate, $idUser, $idGood) {
+    public function __construct($id, $beginingDate, $endDate, $idUser, $good) {
         $this->setId($id);
         $this->setBeginingDate($beginingDate;)
         $this->setEndDate($endDate);
-        $this->setIdGood($idGood);
+        $this->setGood($good);
         $this->setIdUser($idUser);
     }
 
@@ -47,12 +47,12 @@ class Lend {
         return $this->idUser;
     }
     
-    public function setIdGood($idGood){
-        $this->idGood=$idGood;
+    public function setGood($good){
+        $this->good=$good;
     }
 
-    public function getIdGood(){
-        return $this->idGood;
+    public function getGood(){
+        return $this->good;
     }
 
 

@@ -1,21 +1,21 @@
 <?php 
-class Good {
+class Tool {
     private $id;                           
     private $name;
     private $visual;
     private $description;
     private $points;
-    private $idCategory;
-    private $idUser;
+    private $category;
+    private $user;
 
-    public function __construct($id, $name, $visual, $description, $points,$idCategory,$idUser) {
+    public function __construct(int $id,string $name, $visual,string $description,int $points,Category $category,User $user) {
         $this->setId($id);
-        $this->setName($name;)
+        $this->setName($name);
         $this->setVisual($visual);
         $this->setDescription($description);
         $this->setPoints($points);
-        $this->setIdCategory($idCategory);
-        $this->setIdUser($idUser);
+        $this->setCategory($category);
+        $this->setUser($user);
     }
 
 
@@ -59,20 +59,20 @@ class Good {
         return $this->points;
     }
 
-    public function setIdCategory($idCategory){
-        $this->idCategory=$idCategory;
+    public function setCategory($category){
+        $this->category=$category;
     }
 
-    public function getIdCategory(){
-        return $this->idCategory;
+    public function getCategory(){
+        return $this->category;
     }
 
-    public function setIdUser($idUser){
-        $this->idUser=$idUser;
+    public function setUser($user){
+        $this->user=$user;
     }
 
-    public function getIdUser(){
-        return $this->idUser;
+    public function getUser(){
+        return $this->user;
     }
 
 

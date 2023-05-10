@@ -2,7 +2,8 @@
   <img src=<?= $image ?> class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title"><?= $name?></h5>
-  <form action="" method="post">
+  <form action="" method="get">
+    <input type="hidden" name="action" value="show">
     <input type="hidden" name="id" value="<?= $id ?>">
     <button class="btn btn-primary" type="submit">Details</button>
   </form>

@@ -1,5 +1,5 @@
 <?php
-class Users {
+class User {
 
     private $id;
     private $pseudo;
@@ -10,7 +10,7 @@ class Users {
     private $earned_points;
     private $id_role;
 
-        public function __construct($id,$pseudo,$lastname,$firstname,$password,$email,$earned_points,$id_role) {
+        public function __construct(int $id,string $pseudo,string $lastname,string $firstname,string $password,string $email,$earned_points,$id_role) {
         $this->setId($id);
         $this->setPseudo($pseudo);
         $this->setLastname($lastname);

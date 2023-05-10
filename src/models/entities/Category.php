@@ -1,12 +1,12 @@
 <?php 
-class Lend {
+class Category {
     private $id;                           
     private $name;
 
 
     public function __construct($id, $name) {
-        $this->setIdLend($id);
-        $this->setBeginingDate($name;)
+        $this->setId($id);
+        $this->setName($name);
 
     }
 

@@ -38,7 +38,7 @@ class UserManager{
         $stmt->execute();
         $result = $stmt->fetch();
         //on ne peux pas utliser fetchClass avec un constructeur défini ??
-        $user = new Users($result['id'], $result['pseudo'], $result['lastname'], $result['firstname'], $result['password'], $result['email'], $result['earned_points'], $result['id_role']);
+        $user = new User($result['id'], $result['pseudo'], $result['lastname'], $result['firstname'], $result['password'], $result['email'], $result['earned_points'], $result['id_role']);
         if($user) {
             $registeredPassword = $user->getPassword();
             $verifiedUser = password_verify($password, $registeredPassword);
@@ -46,7 +46,8 @@ class UserManager{
 //                session_start()? print('Bienvenue') : print("Connection echouée"); //on lance la session avec session
                 $_SESSION['user'] = [
                     'id' => $user->getId(),
-                    'name' => $user->getLastName()
+                    'name' => $user->getLastName(),
+                    'role' => $user->getIdRole()
                 ];
             }
         } else {

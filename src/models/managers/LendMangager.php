@@ -71,7 +71,7 @@ class LendManager{
     $executeBool = $stmt->execute();
     // $result=$stmt->fetchAll();
     //  self::$pdo=null;
-    $executeBool ? return $lend : return $executeBool;
+    return $executeBool ? $lend : $executeBool;
   }
 
 }

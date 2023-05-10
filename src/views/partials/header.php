@@ -10,6 +10,6 @@
   <header>
     <?php require_once ("Navbar.php"); ?>
   </header>
-  <div class="container">
+  <div class="container row">
 
 
