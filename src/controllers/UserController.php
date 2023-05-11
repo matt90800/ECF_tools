@@ -64,9 +64,9 @@ class UserController {
         $toolList = ToolManager::getToolByUser($userId);
         $user=UserManager::getUserById($userId);
         $user->setTools($toolList);
-/*         echo '<pre>';
+        echo '<pre>';
         print_r($toolList);
-        echo '</pre>'; */
+        echo '</pre>';
         Api::sendTools($toolList);
     }
 
