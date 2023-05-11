@@ -64,10 +64,10 @@ class UserController {
         $toolList = ToolManager::getToolByUser($userId);
         $user=UserManager::getUserById($userId);
         $user->setTools($toolList);
-        echo '<pre>';
-        print_r($user);
-        echo '</pre>';
-        
+/*         echo '<pre>';
+        print_r($toolList);
+        echo '</pre>'; */
+        Api::sendTools($toolList);
     }
 
     static function updateUser($user,$pseudo,$lastname,$firstname,$email,$points){
