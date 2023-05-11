@@ -9,6 +9,7 @@ class User {
     private $email;
     private $earned_points;
     private $role;
+    private $tools=array();
 
         public function __construct(int $id,?string $pseudo,string $lastname,string $firstname,string $password,string $email,int $earned_points,Role $role) {
         $this->setId($id);
@@ -19,6 +20,8 @@ class User {
         $this->setEmail($email);
         $this->setEarnedPoints($earned_points);
         $this->setRole($role);
+        
+
     }
 
     public function getId(){
@@ -84,6 +87,24 @@ class User {
 
     public function setRole($role){
         $this->role = $role;
+    }
+    public function getTools(){
+        return $this->tools;
+    }
+
+    public function setTools(array $tools){
+        foreach ($tools as $tool) {
+            if ($tool instanceof Tool) {
+                $this->tools[] = $tool;
+            } else {
+                throw new InvalidArgumentException('Invalid tool provided');
+            }
+        }
+    }
+
+    public function addTool(Tool ...$tool){
+        array_push($tools,$tool);
+
     }
 
 }

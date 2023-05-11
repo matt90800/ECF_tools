@@ -1,8 +1,8 @@
 <?php
 
 class ToolController {
-    static function displayTool(int $id){
 
+    static function displayTool(int $id){
         $registerPart= UserController::displayLogPart();
         require_once('views/template/Home.php');
         $tool = ToolManager::getToolById($id);
@@ -14,8 +14,6 @@ class ToolController {
         $user=$tool->getUser();
         $id=$tool->getId();
         include('views/template/toolCard.php');
-    
-
         require_once("./views/partials/Footer.php");
     }
 
@@ -26,19 +24,17 @@ class ToolController {
         foreach (CategoryManager::getCategories() as $category ) {
             $categories = $categories."<option value=".$category->getId().">".$category->getName()."</option>";
         }
-
         $name="";
         $description="";
         $points=0;
         include('views/template/ToolManagmentForm.php');
         require_once("./views/partials/Footer.php");
-
     }
+
     static function createTool($name,$description,$points,$category,$user){
         $image = self::imageTransfert();
         $tool = new Tool(-1,$name,$image,$description,$points,CategoryManager::getCategoryById($category),UserManager::getUserById($user));
         ToolManager::addTool($tool);
-
     }
 
     private static function imageTransfert(){
@@ -96,7 +92,6 @@ class ToolController {
         $tool = ToolManager::getToolById($id);
         $tool = new Tool(-1,$name,$image,$description,$points,CategoryManager::getCategoryById($category),UserManager::getUserById($user));
         ToolManager::updateTool($tool);
-
     }
 
     static function delete($id){

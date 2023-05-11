@@ -60,13 +60,18 @@ class ToolManager{
   
   public static function getToolByUser(int $idUser) {
     $pdo = DatabaseConnection::getConnection();
-    $sql = "SELECT * FROM tool WHERE id_user= :idUser" ;
+    $sql = "SELECT * FROM tool WHERE id_users= :idUser" ;
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':id_user', $idUser);
+    $stmt->bindParam(':idUser', $idUser);
     $stmt->execute();
-    $result = $stmt->fetch();
-    //on ne peux pas utliser fetchClass avec un constructeur défini ??
-    return self::createTool($result);
+    $toolArray = array();
+    foreach  ($stmt->fetchAll() as $row) {
+      array_push(
+        $toolArray,
+          self::createTool($row)
+      );
+    }
+    return $toolArray;
   }
 
   public static function updateTool(Tool $tool) {
@@ -78,8 +83,7 @@ class ToolManager{
       points=:points, 
       id_category=:id_category, 
       id_users=:id_users 
-      WHERE id=:id
-";
+      WHERE id=:id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(":id",$tool->getId());
     $stmt->bindValue(':name', $tool->getName());

@@ -28,11 +28,11 @@ class UserManager{
         return self::createUser($result);
     }
 
-    public static function getUserByName(String $name) {
+    public static function getUserByEmail(String $email) {
         $pdo = DatabaseConnection::getConnection();
-        $sql = "SELECT * FROM users WHERE lastname= :name";
+        $sql = "SELECT * FROM users WHERE email= :email";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':email', $email);
         $stmt->execute();
         $result = $stmt->fetch();
         return self::createUser($result);
@@ -52,8 +52,8 @@ class UserManager{
         return $newUser;
     }
 
-    public static function connectUser($name, $password) {
-        $user=self::getUserByName($name);
+    public static function connectUser($email, $password) {
+        $user=self::getUserByEmail($email);
         if($user) {
             $registeredPassword = $user->getPassword();
             $verifiedUser = password_verify($password, $registeredPassword);
@@ -74,6 +74,32 @@ class UserManager{
         unset($_SESSION['user']);
     }
 
+    public static function updateUser(User $user) {
+        $pdo = DatabaseConnection::getConnection();
+        $sql = "UPDATE  users SET 
+          pseudo=:pseudo, 
+          lastname=:lastname, 
+          firstname=:firstname, 
+          password=:password, 
+          email=:email, 
+          earned_points=:points, 
+          id_role=:role 
+          WHERE id=:id";
+
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":id",$user->getId());
+        $stmt->bindValue(':pseudo', $user->getPseudo());
+        $stmt->bindValue(':lastname', $user->getLastname());
+        $stmt->bindValue(':firstname', $user->getFirstname());
+        $stmt->bindValue(':password', $user->getPassword());
+        $stmt->bindValue(':email', $user->getEmail());
+        $stmt->bindValue(':points', $user->getEarnedPoints());
+        $stmt->bindValue(':role', $user->getRole()->getId());
+        $executeBool = $stmt->execute();
+        return $executeBool ? $user : $executeBool;
+      }
+
     private static function createUser($array){
         return new User(
             $array['id'],
@@ -87,5 +113,5 @@ class UserManager{
             ($array['id_role'])
             ) 
             );
-      } 
+    } 
 }

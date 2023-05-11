@@ -116,9 +116,30 @@ if (!empty($_GET)){
                     ToolController::displayTool($id);
                 }
                 break;
-            case 'showAccount':
-                UserController::showAccount($_SESSION['user']['id']);
+            case 'account':
                 
+                if (
+                    isset($_POST['lastname']) &&
+                    isset($_POST['firstname']) &&
+                    isset($_POST['pseudo'])&&
+                    isset($_POST['email'])&&
+                    isset($_POST['points']) ) {
+                        UserController::updateUser(
+                            $_SESSION['user'],
+                            $_POST['pseudo'], 
+                            $_POST['lastname'],
+                            $_POST['firstname'],
+                            $_POST['email'],
+                            $_POST['points'],
+                            $_SESSION['user']['id']
+                        );
+                } elseif (isset($_GET['tab'])){
+                    $userId=$_SESSION['user']['id'];
+                    UserController::showAccount($userId,null);
+                    UserController::getTools($userId);
+
+                } else
+                    UserController::showAccount($_SESSION['user']['id'],"UserManagmentForm.php");   
                 break;
             default:
     

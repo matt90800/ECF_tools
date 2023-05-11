@@ -1,4 +1,7 @@
 <h2><?=$formName?></h2>
+<?=isset($lastname)?'
+<h5 class="card-title">Mes informations personnelles</h5>
+':'' ?>
 <form action="" method="POST">
     <div class="form-group">
         <label for="lastname">Nom de famille</label>
@@ -24,7 +27,7 @@
     ':'
     <div class="form-group">
     <label for="email">Points :</label>
-    <input value="'.$points.'" type="number" class="form-control"  id="email" name="email" required />
+    <input value="'.$points.'" type="number" class="form-control"  id="points" name="points" required />
     </div>
     '?>
     <div class="form-group">
