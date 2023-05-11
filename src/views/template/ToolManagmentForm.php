@@ -2,16 +2,16 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="inputNom">Nom :</label>
-            <input value ="" type="text" class="form-control" id="inputNom" name="nom" required>
+            <input value ="<?= $name ?>" type="text" class="form-control" id="inputNom" name="nom" required>
         </div>
         <div class="form-group col-md-6">
             <label for="description">Description :</label>
-            <input value ="" type="text" class="form-control" id="description" name="description" required>
+            <input value ="<?=$description?>" type="text" class="form-control" id="description" name="description" required>
         </div>
     
     <div class="form-group col-md-6">
         <label for="points">Points :</label>
-        <input value ="10" type="number" class="form-control" id="points" name="points" required>
+        <input value ="<?=$points?>" type="number" class="form-control" id="points" name="points" required>
     </div>
     <div class="form-group col-md-6 ">
         <label for="category">Categorie :</label>

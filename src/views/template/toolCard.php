@@ -16,21 +16,20 @@
         <strong>Catégorie :</strong>
       </li>
       <li class="list-inline-item">
-        <?= $idCategory ?>
+        <?= $categoryName ?>
       </li>
     </ul>
     <ul class="list-inline mb-0">
       <li class="list-inline-item">
-        <strong>Utilisateur :</strong>
+        <strong>Propriétaire :</strong>
       </li>
       <li class="list-inline-item">
-        <?= $idUser ?>
+        <?=  $user->getPseudo() ?>
       </li>
     </ul>
   </div>
-</div>
-    <div class="d-flex justify-content-between">
-    <?php if (ConnectionController::isSignedIn()&& $_SESSION['user']['id']==$idUser){
+  <div class="d-flex justify-content-between">
+    <?php if (UserController::isSignedIn()&& $_SESSION['user']['id']==$user->getId()){
       echo 
       '<form action="">
         <input type="hidden" name="object" value="'.$id.'">
@@ -44,6 +43,5 @@
       </form>';
     } ?>
       <a href=".." class="btn btn-primary d-block">Back</a>
-    </div>
   </div>
 </div>

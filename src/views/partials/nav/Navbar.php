@@ -9,11 +9,10 @@
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href=<?=$home?>>Home</a>
                   </li>
-                  <?php if (ConnectionController::isSignedIn()){
-                    echo '<li class="nav-item">
+                  <?= UserController::isSignedIn()?'<li class="nav-item">
                       <a id="createContact"class="nav-link" href='.$form.'>Ajouter un outil</a>
-                      </li>';
-                  } ?>
+                      </li>':'';
+                   ?>
                 </ul>
                 <?= $registerPart ?>
                 <form action="" class="d-flex" role="search">

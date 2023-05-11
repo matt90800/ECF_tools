@@ -1,0 +1,26 @@
+# Fichiers de sauvegarde
+*~
+*.swp
+
+# Fichiers de configuration
+/.idea
+/.vscode
+/.phpstorm.meta.php
+
+# Fichiers de dépendances et de build
+/vendor
+/node_modules
+/public/build
+composer.lock
+
+# Fichiers de logs et de cache
+/logs
+/var/cache
+/var/sessions
+
+# Fichiers de données sensibles
+.env
+/config/secrets.php
+
+# Dossier Image
+/images

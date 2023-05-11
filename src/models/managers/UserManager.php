@@ -5,18 +5,40 @@ require_once './Models/Entities/Users.php';*/
 
 class UserManager{
 
-    public static function getUsers()
-    {
+    public static function getUsers() {
         $pdo = DatabaseConnection::getConnection();
         $sql = "SELECT * FROM users";
-        $stmt= $pdo->prepare($sql);// on utilise la methode prepare de l'objet PDO; On récupère un objet PDOStatement
-        $stmt->execute();// on exécute le statement
-        $results = $stmt->fetchAll(PDO::FETCH_CLASS, 'User'); //on récupère les données sous la forme d'une classe User
-        return $results;
+        $UserArray = array();
+        foreach  ($pdo->query($sql) as $row) {
+            array_push(
+                $UserArray,
+                self::createUser($row)
+            );
+        }
+        return $UserArray;
     }
 
-    public static function insertUser(String $name, string $firstname, string $email, String $password)
-    {
+    public static function getUserById(int $id) {
+        $pdo = DatabaseConnection::getConnection();
+        $sql = "SELECT * FROM users WHERE id= :id" ;
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return self::createUser($result);
+    }
+
+    public static function getUserByName(String $name) {
+        $pdo = DatabaseConnection::getConnection();
+        $sql = "SELECT * FROM users WHERE lastname= :name";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':name', $name);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return self::createUser($result);
+    }
+
+    public static function insertUser(string $name,string $firstname,string $email,?String $password) {
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         $pdo = DatabaseConnection::getConnection();
         $sql = "INSERT INTO users (lastname,firstname,email, password) VALUES (:name,:firstname,:email, :password)";
@@ -31,14 +53,7 @@ class UserManager{
     }
 
     public static function connectUser($name, $password) {
-        $pdo = DatabaseConnection::getConnection();
-        $sql = "SELECT id, pseudo, lastname, firstname, password, email,earned_points, id_role FROM users WHERE lastname= :name" ;
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':name', $name);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        //on ne peux pas utliser fetchClass avec un constructeur défini ??
-        $user = new User($result['id'], $result['pseudo'], $result['lastname'], $result['firstname'], $result['password'], $result['email'], $result['earned_points'], $result['id_role']);
+        $user=self::getUserByName($name);
         if($user) {
             $registeredPassword = $user->getPassword();
             $verifiedUser = password_verify($password, $registeredPassword);
@@ -47,7 +62,7 @@ class UserManager{
                 $_SESSION['user'] = [
                     'id' => $user->getId(),
                     'name' => $user->getLastName(),
-                    'role' => $user->getIdRole()
+                    'role' => $user->getRole()
                 ];
             }
         } else {
@@ -58,4 +73,19 @@ class UserManager{
     public static function disconnectUser(/* $name */) {
         unset($_SESSION['user']);
     }
+
+    private static function createUser($array){
+        return new User(
+            $array['id'],
+            $array['pseudo'],
+            $array['lastname'],
+            $array['firstname'],
+            $array['password'],
+            $array['email'],
+            $array['earned_points'],
+            RoleManager::getRoleById(
+            ($array['id_role'])
+            ) 
+            );
+      } 
 }

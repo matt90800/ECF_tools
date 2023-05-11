@@ -1,7 +1,7 @@
 <?php
 
 
-class ConnectionController {
+class UserController {
 
     public static function isSignedIn(){
         return count($_SESSION) >0;
@@ -9,22 +9,23 @@ class ConnectionController {
     static function displayLogPart(){
         if (self::isSignedIn()/* count($_SESSION) >0 */) {
             $userName=$_SESSION['user']['name'];
-            return str_replace("USERNAME",$userName,file_get_contents("./views/partials/Connected.php"));
+            return str_replace("USERNAME",$userName,file_get_contents("./views/partials/nav/Connected.php"));
         } else {
-            return file_get_contents("./views/partials/RegisterPart.php");
+            return file_get_contents("./views/partials/nav/LogInSignIn.php");
         }
     }
 
     static function displaySignIn(){
-        $registerPart= ConnectionController::displayLogPart();
+        $registerPart= UserController::displayLogPart();
         require_once('views/template/Home.php');
         require_once('./views/template/SignIn.php');
         require_once("./views/partials/Footer.php");
     }
     static function displaySignUp(){
-        $registerPart= ConnectionController::displayLogPart();
+        $formName="sign up";
+        $registerPart= UserController::displayLogPart();
         require_once('views/template/Home.php');
-        require_once('./views/template/SignUp.php');
+        require_once('./views/template/UserManagmentForm.php');
         require_once("./views/partials/Footer.php");
     }
 
@@ -40,7 +41,26 @@ class ConnectionController {
     static function logOut(){
         UserManager::disconnectUser();
         header("location:index.php");
-
     }
+    
+    static function showAccount($id){
+        $registerPart= UserController::displayLogPart();
+        $user=UserManager::getUserById($id);
+        $formName="Modifier";
+
+        $id=$user->getId();
+        $pseudo=$user->getPseudo();
+        $lastname=$user->getLastname();
+        $firstname=$user->getFirstname();
+        $password=$user->getPassword();
+        $email=$user->getEmail();
+        $points=$user->getEarnedPoints();
+        $role=$user->getRole();
+
+        require_once('views/template/Home.php');
+        require_once('./views/template/Account.php');
+        require_once("./views/partials/Footer.php");
+    }
+    
 
 }

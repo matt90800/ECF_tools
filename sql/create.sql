@@ -17,10 +17,10 @@ CREATE TABLE IF NOT EXISTS users(
    pseudo VARCHAR(50),
    lastname VARCHAR(50)  NOT NULL,
    firstname VARCHAR(50)  NOT NULL,
-   password VARCHAR(255)  NOT NULL UNIQUE,	--password UNIQUE avec le hash ?
+   password VARCHAR(255)  NOT NULL,	--password UNIQUE avec le hash ?
    email VARCHAR(255)  NOT NULL,
-   earned_points SMALLINT,
-   id_role INTEGER,
+   earned_points SMALLINT DEFAULT 0,
+   id_role INTEGER DEFAULT 1,
    PRIMARY KEY(id),
    UNIQUE(email),
    FOREIGN KEY(id_role) REFERENCES role(id)

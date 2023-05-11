@@ -6,9 +6,6 @@ require_once './Models/Entities/Users.php';*/
 class ToolManager{
  
   public static function addTool(Tool $tool) {
-    echo '<pre>';
-    var_dump($tool);
-    echo '</pre>';
     $pdo = DatabaseConnection::getConnection();
     $sql = "INSERT INTO tool (
       name, 
@@ -29,8 +26,8 @@ class ToolManager{
     $stmt->bindValue(':visual', $tool->getVisual());
     $stmt->bindValue(':description', $tool->getDescription());
     $stmt->bindValue(':points', $tool->getPoints());
-    $stmt->bindValue(':id_category', $tool->getIdCategory());
-    $stmt->bindValue(':id_users', $tool->getIdUser());
+    $stmt->bindValue(':id_category', $tool->getCategory()->getId());
+    $stmt->bindValue(':id_users', $tool->getUser()->getId());
     $executeBool = $stmt->execute();
     $tool->setId($pdo->lastInsertId());
     return $executeBool ? $tool : $executeBool;
@@ -71,6 +68,29 @@ class ToolManager{
     //on ne peux pas utliser fetchClass avec un constructeur défini ??
     return self::createTool($result);
   }
+
+  public static function updateTool(Tool $tool) {
+    $pdo = DatabaseConnection::getConnection();
+    $sql = "UPDATE  tool SET 
+      name=:name, 
+      visual=:visual, 
+      description=:description, 
+      points=:points, 
+      id_category=:id_category, 
+      id_users=:id_users 
+      WHERE id=:id
+";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":id",$tool->getId());
+    $stmt->bindValue(':name', $tool->getName());
+    $stmt->bindValue(':visual', $tool->getVisual());
+    $stmt->bindValue(':description', $tool->getDescription());
+    $stmt->bindValue(':points', $tool->getPoints());
+    $stmt->bindValue(':id_category', $tool->getCategory()->getId());
+    $stmt->bindValue(':id_users', $tool->getUser()->getId());
+    $executeBool = $stmt->execute();
+    return $executeBool ? $tool : $executeBool;
+  }
   
   static function deleteTool(int $id){
     $pdo = DatabaseConnection::getConnection();
@@ -90,8 +110,12 @@ class ToolManager{
       $array['visual'],
       $array['description'],
       $array['points'],
-      $array['id_category'],
-      $array['id_users']
+      CategoryManager::getCategoryById(
+        $array['id_category']
+      ),
+      UserManager::getUserById(
+        ($array['id_users'])
+      ) 
     );
   } 
 }

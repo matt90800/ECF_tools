@@ -36,62 +36,97 @@ if ($devLog){
     echo '</pre>';
 }
 
+function searchContacts ($filter){
+    $filter=strtolower($filter);
+    //controleur des vues, vue home par défaut
+    foreach(ContactManager::readContacts() as $contact){
+ 
+            $id= $contact->getId();
+            $firstName= $contact->getFirstName();
+            $lastName =  $contact->getLastName();
+            $image=!empty($contact->getImage())? $contact->getImage(): "./images/no_image.bmp";
+        if (str_contains(strtolower($firstName),$filter)||str_contains(strtolower($lastName),$filter))
+            include("./views/templates/homeCard.php");
+    }
+}
+
 if (!empty($_GET)){
-    $action = $_GET['action'];
-    switch($action){
-        case 'signin':
-            ConnectionController::displaySignIn();
-            if (isset($_POST['username'])&&isset($_POST['password'])){
-                ConnectionController::logUser($_POST['username'], $_POST['password']);
-            }
-            break;
+    if(isset($_GET['action'])) {
+        $action = $_GET['action'];
+        switch($action){
+            case 'signin':
+                UserController::displaySignIn();
+                if (isset($_POST['username'])&&isset($_POST['password'])){
+                    UserController::logUser($_POST['username'], $_POST['password']);
+                }
+                break;
             case 'signup':
-            ConnectionController::displaySignUp();
-            if (
-                isset($_POST['lastname']) &&
-                isset($_POST['firstname']) &&
-                isset($_POST['email'])&&
-                isset($_POST['password']) ) {
-                ConnectionController::createUser($_POST['lastname'], $_POST['firstname'], $_POST['email'],$_POST['password']);
+                UserController::displaySignUp();
+                if (
+                    isset($_POST['lastname']) &&
+                    isset($_POST['firstname']) &&
+                    isset($_POST['email'])&&
+                    isset($_POST['password']) ) {
+                    UserController::createUser($_POST['lastname'], $_POST['firstname'], $_POST['email'],$_POST['password']);
+                }
+                break;
+            case 'logout':
+                UserController::logOut();
+                break;
+            case 'create':
+                ToolController::displayToolCreationForm();
+                if (
+                    isset($_POST['nom']) &&
+                    isset($_POST['description']) &&
+                    isset($_POST['points'])&&
+                    isset($_POST['category']) ) {
+                    ToolController::createTool(
+                        $_POST['nom'], 
+                        $_POST['description'],
+                        $_POST['points'],
+                        $_POST['category'],
+                        $_SESSION['user']['id']
+                        );
+                }
+                break;
+            case 'update':
+                ToolController::displayUpdateWindow();
+                if (
+                    isset($_POST['nom']) &&
+                    isset($_POST['description']) &&
+                    isset($_POST['points'])&&
+                    isset($_POST['category']) ) {
+                    ToolController::updateTool(
+                        $_GET['object'],
+                        $_POST['nom'], 
+                        $_POST['description'],
+                        $_POST['points'],
+                        $_POST['category'],
+                        $_SESSION['user']['id']
+                        );
+                }
+                break;
+            case 'delete':
+                ToolController::delete($_GET['object']);
+                header("location:/");
+                break;
+            case 'show':
+                if(!empty($_GET['id'])){
+                    $id = $_GET['id'];
+                    ToolController::displayTool($id);
+                }
+                break;
+            case 'showAccount':
+                UserController::showAccount($_SESSION['user']['id']);
+                
+                break;
+            default:
+    
+                break;
             }
-            break;
-        case 'logout':
-            ConnectionController::logOut();
-            break;
-        case 'create':
-            ToolController::displayToolCreationForm();
-            if (
-                isset($_POST['nom']) &&
-                isset($_POST['description']) &&
-                isset($_POST['points'])&&
-                isset($_POST['category']) ) {
-                ToolController::createTool(
-                    $_POST['nom'], 
-                    $_POST['description'],
-                    $_POST['points'],
-                    $_POST['category'],
-                    $_SESSION['user']['id']
-                    );
-            }
-        case 'update':
-            
-            
-        case 'delete':
-            ToolManager::deleteTool($_GET['object']);
-            header("location:/");
-  
-        case 'show':
-             if(!empty($_GET['id'])){
-                $id = $_GET['id'];
-                ToolController::displayTool($id);
-            }
-        default:
-
-            break;
-        }
-
-
-
+    } else if(isset($_GET['searchContent'])){
+        HomeController::displayFilteredHome(strtolower($_GET['searchContent']));
+    } 
 } else {
     HomeController::displayHome();
 }
