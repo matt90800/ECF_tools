@@ -21,6 +21,7 @@ composer.lock
 # Fichiers de données sensibles
 .env
 /config/secrets.php
+*.ini
 
 # Dossier Image
 /images
