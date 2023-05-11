@@ -1,6 +1,6 @@
 <?php
 
-$devLog=!true;
+$devLog=true;
 
 // Autoloading des classes
 function myAutoloader($class_name)
@@ -22,7 +22,7 @@ function myAutoloader($class_name)
 spl_autoload_register('myAutoloader');
 
 session_start()? "" : print("Connection echouée"); //on lance la session avec session
-if ($devLog){
+if ($devLog&& !isset($_GET['api'])){
     echo '<pre>';
     var_dump($_SESSION);
     echo '</pre>';
@@ -51,6 +51,16 @@ function searchContacts ($filter){
 }
 
 if (!empty($_GET)){
+    if(isset($_GET['api'])) {
+        $api = $_GET['api'];
+        switch($api){
+            case 'tool':
+                ApiController::sendUserTool($_SESSION['user']['id']/* $_GET['id'] */);
+            break;
+            
+            default:
+        }
+    }
     if(isset($_GET['action'])) {
         $action = $_GET['action'];
         switch($action){
@@ -101,7 +111,7 @@ if (!empty($_GET)){
                         $_POST['nom'], 
                         $_POST['description'],
                         $_POST['points'],
-                        $_POST['category'],
+                        intval($_POST['category']),
                         $_SESSION['user']['id']
                         );
                 }
@@ -135,23 +145,26 @@ if (!empty($_GET)){
                         );
                 } elseif (isset($_GET['tab'])){
                     $userId=$_SESSION['user']['id'];
-                    UserController::showAccount($userId,null);
-                    UserController::getTools($userId);
-
+                   UserController::showAccount($userId,"tools.js");
                 } else
                     UserController::showAccount($_SESSION['user']['id'],"UserManagmentForm.php");   
                 break;
             default:
-    
+          // Requête invalide
+          header("HTTP/1.0 405 Method Not Allowed");
                 break;
             }
     } else if(isset($_GET['searchContent'])){
         HomeController::displayFilteredHome(strtolower($_GET['searchContent']));
     } 
-} else {
+}  else {
     HomeController::displayHome();
 }
 
+
+if (!empty($_POST)) {
+    print("coucou");
+}
 
 
 

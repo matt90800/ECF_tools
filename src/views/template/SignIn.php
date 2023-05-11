@@ -2,7 +2,7 @@
     <h2>Sign In</h2>
     <form action="" method="POST">
       <div class="form-group">
-        <label for="username">Username or email</label>
+        <label for="username">email</label>
         <input type="text" id="username" name="username" required>
       </div>
       <div class="form-group">

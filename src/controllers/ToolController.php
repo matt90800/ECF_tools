@@ -40,19 +40,21 @@ class ToolController {
     private static function imageTransfert(){
         //on a validé la création avec l'image
         $image=null;
-        var_dump($_FILES);
+        //var_dump($_FILES);
         //télécharge l'image sur le serveur
             if(isset($_FILES['image'])){
                 // Répertoire de destination pour enregistrer l'image
                 $destination = "../images/";
+                if (!is_dir($destination)) {
+                    mkdir($destination);
+                }
                 $_FILES['image']['name']=str_replace(" ","_",$_FILES['image']['name']);
     
                 // Nom du fichier sur le serveur (vous pouvez générer un nom unique si nécessaire)
                 $nomFichier = $_FILES['image']['name'];
     
                 // Chemin complet du fichier sur le serveur
-                $cheminFichier = $destination . $nomFichier;
-    
+                $cheminFichier = $destination . $nomFichier;    
                 // Déplace le fichier téléchargé vers le répertoire de destination
                 if (move_uploaded_file($_FILES['image']['tmp_name'], $cheminFichier)) {
                     $image = $cheminFichier;
@@ -89,9 +91,15 @@ class ToolController {
 
     static function updateTool($id,$name,$description,$points,$category,$user){
         $image = self::imageTransfert();
+        var_dump($image);
         $tool = ToolManager::getToolById($id);
-        $tool = new Tool(-1,$name,$image,$description,$points,CategoryManager::getCategoryById($category),UserManager::getUserById($user));
-        ToolManager::updateTool($tool);
+        $tool->setName($name);
+        $tool->setVisual($image);
+        $tool->setDescription($description);
+        $tool->setPoints($points);
+        $tool->setCategory(CategoryManager::getCategoryById($category));
+       // $tool = new Tool(-1,$name,$image,$description,$points,CategoryManager::getCategoryById($category),UserManager::getUserById($user));
+       var_dump( ToolManager::updateTool($tool));
     }
 
     static function delete($id){

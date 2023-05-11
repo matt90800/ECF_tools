@@ -86,7 +86,6 @@ class UserManager{
           id_role=:role 
           WHERE id=:id";
 
-
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(":id",$user->getId());
         $stmt->bindValue(':pseudo', $user->getPseudo());

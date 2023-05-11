@@ -4,7 +4,7 @@
     Options
 </span>
   <ul class="dropdown-menu">
-  <li><a class="dropdown-item" href="?action=account">Mon Compte</a></li>
+  <li><a class="dropdown-item" href="?action=account&tab=info">Mon Compte</a></li>
   <li><a class="dropdown-item" href="?action=logout" id="logout-btn">Déconnexion</a></li>
 </div>
 

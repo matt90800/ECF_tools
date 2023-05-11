@@ -43,7 +43,7 @@ class UserController {
         header("location:index.php");
     }
     
-    static function showAccount($id, $userFormPath){
+    static function showAccount($id, $includePath){
         $registerPart= UserController::displayLogPart();
         $user=UserManager::getUserById($id);
         $formName="Modifier";
@@ -55,6 +55,8 @@ class UserController {
         $email=$user->getEmail();
         $points=$user->getEarnedPoints();
         $role=$user->getRole();
+        $type=substr($includePath,strpos($includePath,'.',strlen($includePath)-5));
+        var_dump($type);
         require_once('views/template/Home.php');
         require_once('./views/template/Account.php');
         require_once("./views/partials/Footer.php");
@@ -64,10 +66,7 @@ class UserController {
         $toolList = ToolManager::getToolByUser($userId);
         $user=UserManager::getUserById($userId);
         $user->setTools($toolList);
-        echo '<pre>';
-        print_r($toolList);
-        echo '</pre>';
-        Api::sendTools($toolList);
+        return $toolList;
     }
 
     static function updateUser($user,$pseudo,$lastname,$firstname,$email,$points){

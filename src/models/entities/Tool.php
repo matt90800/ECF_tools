@@ -59,7 +59,7 @@ class Tool {
         return $this->points;
     }
 
-    public function setCategory($category){
+    public function setCategory(Category $category){
         $this->category=$category;
     }
 
@@ -67,7 +67,7 @@ class Tool {
         return $this->category;
     }
 
-    public function setUser($user){
+    public function setUser(User $user){
         $this->user=$user;
     }
 
