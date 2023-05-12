@@ -13,6 +13,18 @@ class ToolController {
         $categoryName=$tool->getCategory()->getName();
         $user=$tool->getUser();
         $id=$tool->getId();
+        $borrow = LendManager::getAllByTool($id);
+        $string="";
+        foreach ($borrow as $key) {
+            $string = $string . 
+            "<li class='list-group-item'>
+            {$key->getBeginingDate()} -- {$key->getEndDate()}
+            <a href='?action=show&id={$key->getId()}&delete=borrow' class='float-right text-danger' onclick='removeDate(this)'>
+            <span aria-hidden='true'>&times;</span>
+        </a>
+            </li>
+        ";
+        }
         include('views/template/toolCard.php');
         require_once("./views/partials/Footer.php");
     }
@@ -123,14 +135,42 @@ class ToolController {
             $categories = $categories."<option value=".$category->getId().">".$category->getName()."</option>";
         } */
 
-        include('views/template/Lend.php');
+        include('views/template/BorrowForm.php');
         require_once("./views/partials/Footer.php");
         //toolManager::update($tool); 
     }
 
-    static function createLend($begining_date,$end_date,$borrower,$tool){
-        $lend = new Lend(-1,$begining_date,$end_date,UserManager::getById($borrower),ToolManager::getById($tool));
-        LendManager::add($tool);
+    static function createLend($begining_date,$end_date,$borrower,$toolId){
+        $borrowDate=new DateTime($begining_date);
+        $returnDate=new DateTime($end_date);
+        $lend = new Lend(-1,$borrowDate,$returnDate,UserManager::getById($borrower),ToolManager::getById($toolId));
+        self::checkAvailable($borrowDate,$returnDate,$toolId);
+        LendManager::add($lend);
+    }
+
+    static function checkAvailable($borrowDate,$returnDate,$toolId):bool{
+        $lends=LendManager::getAllByTool($toolId);
+        $return=false;
+        foreach ($lends as $lend) {
+            $lendStart=$lend->getBeginingDate();
+            $lendEnd=$lend->getEndDate();
+            if (($returnDate < $lendStart) || ($lendEnd < $borrowDate)) {
+                // Les intervalles ne se chevauchent pas
+                echo "Les intervalles ne se chevauchent pas.";
+            } else {
+                // Les intervalles se chevauchent
+                echo "Les intervalles se chevauchent.";
+            }
+        }
+        return $return;
+    }
+
+    static function removeLend(int $id):bool{
+        $lend = LendManager::getById($id);
+        $borrower=$lend->getUser()->getId();
+        return $borrower==$_SESSION['user']['id']?
+            LendManager::delete($id):
+            false;
     }
 
 }

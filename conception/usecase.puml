@@ -5,30 +5,34 @@ left to right direction
 actor Utilisateur as User
 actor Administrateur as Admin
 
-rectangle "Gestion des Biens" {
-  usecase "Consulter les biens disponibles" as UC1
-  usecase "Effectuer une réservation" as UC2
-}
+rectangle MyLoc {
+      usecase "Consulter les biens disponibles" as UC1
+      usecase "Effectuer une réservation" as UC2
 
-rectangle "Espace Utilisateur" {
-  usecase "Consulter ses points" as UC3
-  usecase "Consulter ses biens enregistrés" as UC4
-  usecase "Ajouter de nouveaux biens à prêter" as UC5
-  usecase "Suivre les prêts en cours" as UC6
-}
 
-rectangle "Partie d'Administration" {
-  usecase "Ajouter des catégories" as UC7
-  usecase "Gérer les utilisateurs" as UC8
-}
 
-User --> UC1 : <<utilise>>
-User --> UC2 : <<utilise>>
-User --> UC3 : <<utilise>>
-User --> UC4 : <<utilise>>
-User --> UC5 : <<utilise>>
-User --> UC6 : <<utilise>>
-Admin --> UC7 : <<utilise>>
-Admin --> UC8 : <<utilise>>
+      usecase "Consulter ses points" as UC3
+      usecase "Consulter ses biens enregistrés" as UC4
+      usecase "Ajouter de nouveaux biens à prêter" as UC5
+      usecase "Suivre les prêts en cours" as UC6
+      usecase "consulter une catégorie" as UC7
+      usecase "Ajouter des catégories" as AC1
+      usecase "Gérer les utilisateurs" as AC2
+
+
+
+
+}
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+Admin --> AC1
+Admin --> AC2
+
+Admin --> User:extends
 
 @enduml

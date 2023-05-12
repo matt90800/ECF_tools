@@ -28,6 +28,14 @@
       </li>
     </ul>
   </div>
+      <!-- Ajout de la section prochaines dates de prêt -->
+      <div class="card-footer">
+        <h5>Prochaines dates de prêt</h5>
+        <ul class="list-group">
+          <?=$string?>
+        </ul>
+      </div>
+
   <div class="d-flex justify-content-between">
     <?php if (UserController::isSignedIn()&& $_SESSION['user']['id']==$user->getId()){
       echo 
@@ -42,7 +50,8 @@
         <button class="btn btn-primary" type="submit">Delete</button>
       </form>';
     } ?>
+
       <a href="?action=borrow&id=<?=$id?>" class="btn btn-primary d-block">Reserver</a>
-      <a href=".." class="btn btn-primary d-block">Back</a>
+      <a href="javascript:history.go(-1)" class="btn btn-primary d-block">Back</a>
   </div>
 </div>

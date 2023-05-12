@@ -73,6 +73,10 @@ if (!empty($_GET)){
                // else
                 ApiController::sendUsers();
             break;
+            case 'lend':
+                if (isset($_GET['id']))
+                    ApiController::sendLendTool($_GET['id']);
+               // else
             
             default:
         }
@@ -113,6 +117,7 @@ if (!empty($_GET)){
                         $_POST['category'],
                         $_SESSION['user']['id']
                         );
+                    header('Location: /' );
                 }
                 break;
             case 'update':
@@ -137,32 +142,44 @@ if (!empty($_GET)){
                 header("location:/");
                 break;
             case 'show':
+                if (isset($_GET['delete'])&&$_GET['delete']=='borrow'){
+                    ToolController::removeLend($_GET['id']);
+                    header("location:/?action=show&id=$id");
+                }
                 if(!empty($_GET['id'])){
                     $id = $_GET['id'];
                     ToolController::displayTool($id);
                 }
                 break;
             case 'account':
-                if (
-                    isset($_POST['lastname']) &&
-                    isset($_POST['firstname']) &&
-                    isset($_POST['pseudo'])&&
-                    isset($_POST['email'])&&
-                    isset($_POST['points']) ) {
-                        UserController::updateUser(
-                            $_SESSION['user'],
-                            $_POST['pseudo'], 
-                            $_POST['lastname'],
-                            $_POST['firstname'],
-                            $_POST['email'],
-                            $_POST['points'],
-                            $_SESSION['user']['id']
-                        );
-                } elseif (isset($_GET['tab'])&&$_GET['tab']=='tool'){
-                    $userId=$_SESSION['user']['id'];
-                   UserController::showAccount($userId,"tools.js");
-                } else
-                    UserController::showAccount($_SESSION['user']['id'],"UserManagmentForm.php");   
+                if(isset($_SESSION['user'])) {
+                    if (
+                        isset($_POST['lastname']) &&
+                        isset($_POST['firstname']) &&
+                        isset($_POST['pseudo'])&&
+                        isset($_POST['email'])&&
+                        isset($_POST['points']) ) {
+                            UserController::updateUser(
+                                $_SESSION['user'],
+                                $_POST['pseudo'], 
+                                $_POST['lastname'],
+                                $_POST['firstname'],
+                                $_POST['email'],
+                                $_POST['points'],
+                                $_SESSION['user']['id']
+                            );
+                    } elseif (isset($_GET['tab'])&&$_GET['tab']=='tool'){
+                        $userId=$_SESSION['user']['id'];
+                    UserController::showAccount($userId,"tools.js");
+                    } elseif (isset($_GET['tab'])&&$_GET['tab']=='admin'&& $_SESSION['user']['role']='admin'){ //on vérifie que l'user connecté est bien admin
+                        $userId=$_SESSION['user']['id'];
+                        UserController::showAccount($userId,"Admin.php");
+                    } else
+                        UserController::showAccount($_SESSION['user']['id'],"UserManagmentForm.php"); 
+                } else {
+                    header("HTTP/1.1 403 Forbidden");
+                    include("views/error/403.html");
+                }  
                 break;
             case 'borrow':
                 ToolController::displayLendForm($_GET['id']);
@@ -171,19 +188,19 @@ if (!empty($_GET)){
                     isset($_POST['end_date']) 
                    // isset($_POST['points'])&&
                      ) {
-                    ToolController::update(
-                        $_GET['object'],
-                        $_POST['nom'], 
-                        $_POST['description'],
-                        $_POST['points'],
-                        intval($_POST['category']),
-                        $_SESSION['user']['id']
+                    ToolController::createLend(
+                        $_POST['begining_date'],
+                        $_POST['end_date'],
+                        $_SESSION['user']['id'],
+                        $_POST['id_tool'],
                         );
                 }
                 break;
                 default:
           // Requête invalide
-          header("HTTP/1.0 405 Method Not Allowed");
+          //header("HTTP/1.0 405 Method Not Allowed");
+          header("HTTP/1.1 403 Forbidden");
+          include("views/error/403.html");
                 break;
             }
     } else if(isset($_GET['searchContent'])){

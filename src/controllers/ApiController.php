@@ -13,4 +13,8 @@ class ApiController{
         $Users=UserManager::getAll();
         Api::sendUsers($Users);
     }
+
+    static function sendLendTool($id){
+        Api::sendBorrowByTool($id);
+    }
 }

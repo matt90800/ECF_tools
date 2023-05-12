@@ -28,7 +28,7 @@ class Lend {
     }
 
     public function getBeginingDate(){
-        return $this->beginingDate;
+        return $this->beginingDate->format('Y-m-d');
     }
 
     public function setEndDate(DateTime $endDate){
@@ -36,7 +36,7 @@ class Lend {
     }
 
     public function getEndDate(){
-        return $this->endDate;
+        return $this->endDate->format('Y-m-d');
     }
 
     public function setUser(User $user){

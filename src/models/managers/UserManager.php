@@ -65,7 +65,7 @@ class UserManager implements ManagerInterface{
                 $_SESSION['user'] = [
                     'id' => $user->getId(),
                     'name' => $user->getLastName(),
-                    'role' => $user->getRole()
+                    'role' => $user->getRole()->getName()
                 ];
             }
         } else {
@@ -106,6 +106,7 @@ class UserManager implements ManagerInterface{
      * @param T $entity
      */
     static function delete(int $id): bool {
+        // pas pouvoir supprimer son compte tant qu'un prêt est en cours le concernant (qu'il soit propriétaire ou emprunteur)
         return false;
     }
 

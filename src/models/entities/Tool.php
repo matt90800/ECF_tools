@@ -8,7 +8,7 @@ class Tool {
     private $category;
     private $user;
 
-    public function __construct(int $id,string $name, $visual,string $description,int $points,Category $category,User $user) {
+    public function __construct(int $id,string $name,?string $visual,string $description,int $points,Category $category,User $user) {
         $this->setId($id);
         $this->setName($name);
         $this->setVisual($visual);
@@ -35,7 +35,7 @@ class Tool {
         return $this->name;
     }
 
-    public function setVisual(string $visual){
+    public function setVisual(?string $visual){
         $this->visual=$visual;
     }
 
