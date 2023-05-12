@@ -97,7 +97,7 @@ class ToolManager implements ManagerInterface{
     $stmt->bindValue(':id_category', $tool->getCategory()->getId());
     $stmt->bindValue(':id_users', $tool->getUser()->getId());
     $executeBool = $stmt->execute();
-    return $executeBool ? $tool : $executeBool;
+    return $executeBool ;
   }
   
   public static function delete(int $id):bool {

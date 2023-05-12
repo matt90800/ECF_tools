@@ -8,6 +8,9 @@ class ApiController{
     static function sendTools() {
         $tools=ToolManager::getAll();
         Api::sendTools($tools);
-
+    }
+    static function sendUsers() {
+        $Users=UserManager::getAll();
+        Api::sendUsers($Users);
     }
 }

@@ -21,7 +21,7 @@
     <div class="form-group col-md-6">
         <label for="inputImage">Image :</label>
         <div class="custom-file">
-            <input type="file" class="custom-file-input" id="inputImage" name="image" accept="image/png">
+            <input type="file" class="custom-file-input" id="inputImage" name="image" accept="image">
             <label class="custom-file-label" for="inputImage">Choisir une image</label>
         </div>
     </div>

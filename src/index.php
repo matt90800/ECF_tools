@@ -66,6 +66,12 @@ if (!empty($_GET)){
                 ApiController::sendUserTool($_SESSION['user']['id']/* $_GET['id'] */);
                 else
                 ApiController::sendTools();
+                break;
+            case 'user':
+               // if (isset($_GET['id']))
+               // ApiController::sendUserTool($_SESSION['user']['id']/* $_GET['id'] */);
+               // else
+                ApiController::sendUsers();
             break;
             
             default:
