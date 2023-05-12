@@ -3,19 +3,29 @@
 /* require_once 'connect.php';
 require_once './Models/Entities/Users.php';*/
 
-class RoleManager{
+class RoleManager implements ManagerInterface{
  
-  public static function addRole(Role $role) {
+  public static function add($role):bool {
     $pdo = DatabaseConnection::getConnection();
     $sql = "INSERT INTO Role (name) VALUES (:name)";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':name', $role->getName());
     $executeBool = $stmt->execute();
     $role->setId($pdo->lastInsertId());
-    return $role;
+    return $executeBool;
   }
 
-  public static function getRoles() {
+  public static function getById(int $id) {
+    $pdo = DatabaseConnection::getConnection();
+    $sql = "SELECT * FROM role WHERE id= :id" ;
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    return self::createRole($result);
+  }
+
+  public static function getAll():array {
     $pdo = DatabaseConnection::getConnection();
     $sql = "SELECT * FROM role";
     $toolArray = array();
@@ -28,17 +38,7 @@ class RoleManager{
     return $toolArray;
   }
 
-  public static function getRoleById(int $id) {
-    $pdo = DatabaseConnection::getConnection();
-    $sql = "SELECT * FROM role WHERE id= :id" ;
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
-    $result = $stmt->fetch();
-    return self::createRole($result);
-  }
-  
-  public static function getRoleByUser(int $idUser) {
+  public static function getByUser(int $idUser) {
     $pdo = DatabaseConnection::getConnection();
     $sql = "SELECT * FROM role WHERE id_user= :idUser" ;
     $stmt = $pdo->prepare($sql);
@@ -48,16 +48,20 @@ class RoleManager{
     return self::createRole($result);
   }
   
-  static function deleteRole(int $idRole){
+  public static function update($tool):bool {
+
+    return false;
+  }
+
+  static function delete(int $id):bool{
     $pdo = DatabaseConnection::getConnection();
     $sql="DELETE FROM role WHERE (id=:id)";
     $stmt = $pdo->prepare($sql);
-/*     $id=$role->getId(); */
-    $stmt->bindParam(":id",$idRole);
+    $stmt->bindParam(":id",$id);
     $executeBool = $stmt->execute();
     // $result=$stmt->fetchAll();
     //  self::$pdo=null;
-    return $executeBool ? $role : $executeBool;
+    return $executeBool;
   }
 
   private static function createRole($array){

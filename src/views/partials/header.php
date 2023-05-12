@@ -9,6 +9,9 @@
   <header>
     <?php require_once ("nav/Navbar.php"); ?>
   </header>
-  <div class="container row">
+  <div class="container">
+    <div class="row">
+
+    
 
 

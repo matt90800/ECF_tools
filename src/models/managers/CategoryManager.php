@@ -3,19 +3,22 @@
 /* require_once 'connect.php';
 require_once './Models/Entities/Users.php';*/
 
-class CategoryManager{
+/**
+ * @template T of Category
+ */
+class CategoryManager implements ManagerInterface{
  
-  public static function addCategory(Category $category) {
+  public static function add($category):bool {
     $pdo = DatabaseConnection::getConnection();
     $sql = "INSERT INTO category (name) VALUES (:name)";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':name', $category->getName());
     $executeBool = $stmt->execute();
     $category->setId($pdo->lastInsertId());
-    return $category;
+    return $executeBool;
   }
 
-  public static function getCategories() {
+  public static function getAll():array {
     $pdo = DatabaseConnection::getConnection();
     $sql = "SELECT * FROM category";
     $toolArray = array();
@@ -28,14 +31,13 @@ class CategoryManager{
     return $toolArray;
   }
 
-  public static function getCategoryById(int $id) {
+  public static function getById(int $id) {
     $pdo = DatabaseConnection::getConnection();
     $sql = "SELECT * FROM category WHERE id= :id" ;
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':id', $id);
     $stmt->execute();
     $result = $stmt->fetch();
-    //on ne peux pas utliser fetchClass avec un constructeur défini ??
     return self::createCategory($result);
   }
   
@@ -49,17 +51,21 @@ class CategoryManager{
     //on ne peux pas utliser fetchClass avec un constructeur défini ??
     return self::createCategory($result);
   }
+
+  static function update($category):bool{
+    return false;
+  }
   
-  static function deletecategory(Category $category){
+  static function delete(int $id):bool{
     $pdo = DatabaseConnection::getConnection();
     $sql="DELETE FROM category WHERE (id=:id)";
     $stmt = $pdo->prepare($sql);
-    $id=$category->getId();
+
     $stmt->bindParam(":id",$id);
     $executeBool = $stmt->execute();
     // $result=$stmt->fetchAll();
     //  self::$pdo=null;
-    return $executeBool ? $category : $executeBool;
+    return $executeBool;
   }
 
   private static function createCategory($array){

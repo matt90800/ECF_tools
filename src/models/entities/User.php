@@ -28,7 +28,7 @@ class User {
         return $this->id;
     }
 
-    public function setId($id){
+    public function setId(int $id){
         $this->id = $id;
     }
 
@@ -36,7 +36,7 @@ class User {
         return is_null($this->pseudo) ? "anonyme" : $this->pseudo;
     }
 
-    public function setPseudo($pseudo)  {
+    public function setPseudo(?string $pseudo)  {
         $pseudo=($pseudo=="anonyme") ? "" : $pseudo;
         $this->pseudo = $pseudo;
     }
@@ -45,7 +45,7 @@ class User {
         return $this->lastname;
     }
 
-    public function setLastname($lastname){
+    public function setLastname(string $lastname){
         $this->lastname = $lastname;
     }
 
@@ -53,7 +53,7 @@ class User {
         return $this->firstname;
     }
 
-    public function setFirstname($firstname){
+    public function setFirstname(string $firstname){
         $this->firstname = $firstname;
     }
 
@@ -61,7 +61,7 @@ class User {
         return $this->password;
     }
 
-    public function setPassword($password){
+    public function setPassword(string $password){
         $this->password = $password;
     }
 
@@ -69,7 +69,7 @@ class User {
         return $this->email;
     }
 
-    public function setEmail($email){
+    public function setEmail(string $email){
         $this->email = $email;
     }
 
@@ -77,7 +77,7 @@ class User {
         return $this->earned_points;
     }
 
-    public function setEarnedPoints($earned_points){
+    public function setEarnedPoints(int $earned_points){
         $this->earned_points = $earned_points;
     }
 
@@ -85,7 +85,7 @@ class User {
         return $this->role;
     }
 
-    public function setRole($role){
+    public function setRole(Role $role){
         $this->role = $role;
     }
     public function getTools(){
@@ -104,7 +104,6 @@ class User {
 
     public function addTool(Tool ...$tool){
         array_push($tools,$tool);
-
     }
 
 }

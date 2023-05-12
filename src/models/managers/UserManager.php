@@ -3,43 +3,13 @@
 /* require_once 'connect.php';
 require_once './Models/Entities/Users.php';*/
 
-class UserManager{
+/**
+ * @template User
+ */
+class UserManager implements ManagerInterface{
 
-    public static function getUsers() {
-        $pdo = DatabaseConnection::getConnection();
-        $sql = "SELECT * FROM users";
-        $UserArray = array();
-        foreach  ($pdo->query($sql) as $row) {
-            array_push(
-                $UserArray,
-                self::createUser($row)
-            );
-        }
-        return $UserArray;
-    }
-
-    public static function getUserById(int $id) {
-        $pdo = DatabaseConnection::getConnection();
-        $sql = "SELECT * FROM users WHERE id= :id" ;
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        return self::createUser($result);
-    }
-
-    public static function getUserByEmail(String $email) {
-        $pdo = DatabaseConnection::getConnection();
-        $sql = "SELECT * FROM users WHERE email= :email";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        return self::createUser($result);
-    }
-
-    public static function insertUser(string $name,string $firstname,string $email,?String $password) {
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+    public static function add($user):bool {
+        $hashedPassword = password_hash($user->getPassword(), PASSWORD_BCRYPT);
         $pdo = DatabaseConnection::getConnection();
         $sql = "INSERT INTO users (lastname,firstname,email, password) VALUES (:name,:firstname,:email, :password)";
         $stmt = $pdo->prepare($sql);
@@ -52,8 +22,41 @@ class UserManager{
         return $newUser;
     }
 
+    public static function getById(int $id) {
+        $pdo = DatabaseConnection::getConnection();
+        $sql = "SELECT * FROM users WHERE id= :id" ;
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return self::createUser($result);
+    }
+
+    public static function getAll():array {
+        $pdo = DatabaseConnection::getConnection();
+        $sql = "SELECT * FROM users";
+        $UserArray = array();
+        foreach  ($pdo->query($sql) as $row) {
+            array_push(
+                $UserArray,
+                self::createUser($row)
+            );
+        }
+        return $UserArray;
+    }
+
+    public static function getByEmail(String $email) {
+        $pdo = DatabaseConnection::getConnection();
+        $sql = "SELECT * FROM users WHERE email= :email";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return self::createUser($result);
+    }
+
     public static function connectUser($email, $password) {
-        $user=self::getUserByEmail($email);
+        $user=self::getByEmail($email);
         if($user) {
             $registeredPassword = $user->getPassword();
             $verifiedUser = password_verify($password, $registeredPassword);
@@ -74,7 +77,7 @@ class UserManager{
         unset($_SESSION['user']);
     }
 
-    public static function updateUser(User $user) {
+    public static function update($user):bool {
         $pdo = DatabaseConnection::getConnection();
         $sql = "UPDATE  users SET 
           pseudo=:pseudo, 
@@ -97,9 +100,16 @@ class UserManager{
         $stmt->bindValue(':role', $user->getRole()->getId());
         $executeBool = $stmt->execute();
         return $executeBool ? $user : $executeBool;
-      }
+    }
 
-    private static function createUser($array){
+    /**
+     * @param T $entity
+     */
+    static function delete(int $id): bool {
+        return false;
+    }
+
+      private static function createUser($array){
         return new User(
             $array['id'],
             $array['pseudo'],
@@ -108,7 +118,7 @@ class UserManager{
             $array['password'],
             $array['email'],
             $array['earned_points'],
-            RoleManager::getRoleById(
+            RoleManager::getById(
             ($array['id_role'])
             ) 
             );

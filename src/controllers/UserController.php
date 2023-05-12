@@ -30,11 +30,11 @@ class UserController {
     }
 
     static function createUser($lastName,$firstName,$email,$password){
-        UserManager::insertUser($_POST['lastname'], $_POST['firstname'], $_POST['email'],$_POST['password']);
+        UserManager::add($_POST['lastname'], $_POST['firstname'], $_POST['email'],$_POST['password']);
     }
 
-    static function logUser($username,$password){
-        $user = UserManager::connectUser($_POST['username'], $_POST['password']);
+    static function logUser($email,$password){
+        $bool = UserManager::connectUser($email,$password);
         header("location:index.php");
     }
 
@@ -45,9 +45,9 @@ class UserController {
     
     static function showAccount($id, $includePath){
         $registerPart= UserController::displayLogPart();
-        $user=UserManager::getUserById($id);
+        $user=UserManager::getById($id);
         $formName="Modifier";
-        $id=$user->getId();
+        //$id=$user->getId();
         $pseudo=$user->getPseudo();
         $lastname=$user->getLastname();
         $firstname=$user->getFirstname();
@@ -56,7 +56,8 @@ class UserController {
         $points=$user->getEarnedPoints();
         $role=$user->getRole();
         $type=substr($includePath,strpos($includePath,'.',strlen($includePath)-5));
-        var_dump($type);
+        print_r($user);
+
         require_once('views/template/Home.php');
         require_once('./views/template/Account.php');
         require_once("./views/partials/Footer.php");
@@ -64,19 +65,19 @@ class UserController {
 
     static function getTools($userId){
         $toolList = ToolManager::getToolByUser($userId);
-        $user=UserManager::getUserById($userId);
+        $user=UserManager::getById($userId);
         $user->setTools($toolList);
         return $toolList;
     }
 
     static function updateUser($user,$pseudo,$lastname,$firstname,$email,$points){
-        $user=UserManager::getUserById($user['id']);
+        $user=UserManager::getById($user['id']);
         $user->setPseudo($pseudo);
         $user->setLastname($lastname);
         $user->setFirstname($firstname);
         $user->setEmail($email);
         $user->setEarnedPoints($points);
-        UserManager::updateUser($user);
+        UserManager::update($user);
     }
     
 

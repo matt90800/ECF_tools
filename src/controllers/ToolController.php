@@ -5,7 +5,7 @@ class ToolController {
     static function displayTool(int $id){
         $registerPart= UserController::displayLogPart();
         require_once('views/template/Home.php');
-        $tool = ToolManager::getToolById($id);
+        $tool = ToolManager::getById($id);
         $image=$tool->getVisual();
         $name=$tool->getName();
         $description=$tool->getDescription();
@@ -21,7 +21,7 @@ class ToolController {
         $registerPart= UserController::displayLogPart();
         require_once('views/template/Home.php');
         $categories="";
-        foreach (CategoryManager::getCategories() as $category ) {
+        foreach (CategoryManager::getAll() as $category ) {
             $categories = $categories."<option value=".$category->getId().">".$category->getName()."</option>";
         }
         $name="";
@@ -33,8 +33,8 @@ class ToolController {
 
     static function createTool($name,$description,$points,$category,$user){
         $image = self::imageTransfert();
-        $tool = new Tool(-1,$name,$image,$description,$points,CategoryManager::getCategoryById($category),UserManager::getUserById($user));
-        ToolManager::addTool($tool);
+        $tool = new Tool(-1,$name,$image,$description,$points,CategoryManager::getById($category),UserManager::getById($user));
+        ToolManager::add($tool);
     }
 
     private static function imageTransfert(){
@@ -68,7 +68,7 @@ class ToolController {
     
             //update selectionné
     static function  displayUpdateWindow(){
-        $tool=ToolManager::getToolById($_GET["object"]);
+        $tool=ToolManager::getById($_GET["object"]);
         $id=$tool->getId();
         $name=$tool->getName();
         $visual=$tool->getVisual();
@@ -80,30 +80,57 @@ class ToolController {
         $registerPart= UserController::displayLogPart();
         require_once('views/template/Home.php');
         $categories="";
-        foreach (CategoryManager::getCategories() as $category ) {
+        foreach (CategoryManager::getAll() as $category ) {
             $categories = $categories."<option value=".$category->getId().">".$category->getName()."</option>";
         }
 
         include('views/template/ToolManagmentForm.php');
         require_once("./views/partials/Footer.php");
-        //toolManager::updatetool($tool); 
+        //toolManager::update($tool); 
     }
 
-    static function updateTool($id,$name,$description,$points,$category,$user){
+    static function update($id,$name,$description,$points,$category,$user){
         $image = self::imageTransfert();
         var_dump($image);
-        $tool = ToolManager::getToolById($id);
+        $tool = ToolManager::getById($id);
         $tool->setName($name);
         $tool->setVisual($image);
         $tool->setDescription($description);
         $tool->setPoints($points);
-        $tool->setCategory(CategoryManager::getCategoryById($category));
-       // $tool = new Tool(-1,$name,$image,$description,$points,CategoryManager::getCategoryById($category),UserManager::getUserById($user));
-       var_dump( ToolManager::updateTool($tool));
+        $tool->setCategory(CategoryManager::getById($category));
+       // $tool = new Tool(-1,$name,$image,$description,$points,CategoryManager::getById($category),UserManager::getById($user));
+       var_dump( ToolManager::update($tool));
     }
 
     static function delete($id){
-        ToolManager::deleteTool($id);
+        ToolManager::delete($id);
     } 
+
+    static function displayLendForm($id){
+        $tool=ToolManager::getById($id);
+        $id=$tool->getId();
+        $name=$tool->getName();
+        $visual=$tool->getVisual();
+        $description=$tool->getDescription();
+        $points=$tool->getPoints();
+        $category=$tool->getCategory();
+        $user=$tool->getUser();
+      //  $action="update";
+        $registerPart= UserController::displayLogPart();
+        require_once('views/template/Home.php');
+/*         $categories="";
+        foreach (CategoryManager::getAll() as $category ) {
+            $categories = $categories."<option value=".$category->getId().">".$category->getName()."</option>";
+        } */
+
+        include('views/template/Lend.php');
+        require_once("./views/partials/Footer.php");
+        //toolManager::update($tool); 
+    }
+
+    static function createLend($begining_date,$end_date,$borrower,$tool){
+        $lend = new Lend(-1,$begining_date,$end_date,UserManager::getById($borrower),ToolManager::getById($tool));
+        LendManager::add($tool);
+    }
 
 }

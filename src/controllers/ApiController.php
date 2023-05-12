@@ -6,6 +6,8 @@ class ApiController{
     }
     
     static function sendTools() {
+        $tools=ToolManager::getAll();
+        Api::sendTools($tools);
 
     }
 }

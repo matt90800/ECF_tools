@@ -42,6 +42,7 @@
         <button class="btn btn-primary" type="submit">Delete</button>
       </form>';
     } ?>
+      <a href="?action=borrow&id=<?=$id?>" class="btn btn-primary d-block">Reserver</a>
       <a href=".." class="btn btn-primary d-block">Back</a>
   </div>
 </div>

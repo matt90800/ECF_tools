@@ -6,7 +6,7 @@ class HomeController {
         $registerPart= UserController::displayLogPart();
         require_once('views/template/Home.php');
         
-        foreach  (ToolManager::getTools() as $tool) {
+        foreach  (ToolManager::getAll() as $tool) {
             $image=$tool->getVisual();
             $name=$tool->getName();
             $id=$tool->getId();
@@ -20,11 +20,11 @@ class HomeController {
         $registerPart= UserController::displayLogPart();
         require_once('views/template/Home.php');
         $found=false;
-        foreach  (ToolManager::getTools() as $tool) {
+        foreach  (ToolManager::getAll() as $tool) {
             $image=$tool->getVisual();
-            $name=$tool->getName();
-            $description=$tool->getDescription();
-            $category=$tool->getCategory()->getName();
+            $name=strtolower($tool->getName());
+            $description=strtolower($tool->getDescription());
+            $category=strtolower($tool->getCategory()->getName());
             $id=$tool->getId();
             if (str_contains($name,$filter)||
                 str_contains($description,$filter)||

@@ -1,6 +1,13 @@
 <?php
 
-$devLog=true;
+$devLog=!true;
+function printPre($var){
+    if (!isset($_GET['api'])){
+        echo '<pre>';
+        var_dump($var);
+        echo '</pre>';
+    }
+}
 
 // Autoloading des classes
 function myAutoloader($class_name)
@@ -36,26 +43,29 @@ if ($devLog&& !isset($_GET['api'])){
     echo '</pre>';
 }
 
-function searchContacts ($filter){
+/* function searchContacts ($filter){
     $filter=strtolower($filter);
     //controleur des vues, vue home par défaut
-    foreach(ContactManager::readContacts() as $contact){
+    foreach(ToolManager::getAll() as $tool){
  
-            $id= $contact->getId();
-            $firstName= $contact->getFirstName();
-            $lastName =  $contact->getLastName();
-            $image=!empty($contact->getImage())? $contact->getImage(): "./images/no_image.bmp";
+            $id= $tool->getId();
+            $firstName= $tool->getFirstName();
+            $lastName =  $tool->getLastName();
+            $image=!empty($tool->getImage())? $tool->getImage(): "./images/no_image.bmp";
         if (str_contains(strtolower($firstName),$filter)||str_contains(strtolower($lastName),$filter))
             include("./views/templates/homeCard.php");
     }
-}
+} */
 
 if (!empty($_GET)){
     if(isset($_GET['api'])) {
         $api = $_GET['api'];
         switch($api){
             case 'tool':
+                if (isset($_GET['id']))
                 ApiController::sendUserTool($_SESSION['user']['id']/* $_GET['id'] */);
+                else
+                ApiController::sendTools();
             break;
             
             default:
@@ -106,7 +116,7 @@ if (!empty($_GET)){
                     isset($_POST['description']) &&
                     isset($_POST['points'])&&
                     isset($_POST['category']) ) {
-                    ToolController::updateTool(
+                    ToolController::update(
                         $_GET['object'],
                         $_POST['nom'], 
                         $_POST['description'],
@@ -127,7 +137,6 @@ if (!empty($_GET)){
                 }
                 break;
             case 'account':
-                
                 if (
                     isset($_POST['lastname']) &&
                     isset($_POST['firstname']) &&
@@ -143,13 +152,30 @@ if (!empty($_GET)){
                             $_POST['points'],
                             $_SESSION['user']['id']
                         );
-                } elseif (isset($_GET['tab'])){
+                } elseif (isset($_GET['tab'])&&$_GET['tab']=='tool'){
                     $userId=$_SESSION['user']['id'];
                    UserController::showAccount($userId,"tools.js");
                 } else
                     UserController::showAccount($_SESSION['user']['id'],"UserManagmentForm.php");   
                 break;
-            default:
+            case 'borrow':
+                ToolController::displayLendForm($_GET['id']);
+                if (
+                    isset($_POST['begining_date']) &&
+                    isset($_POST['end_date']) 
+                   // isset($_POST['points'])&&
+                     ) {
+                    ToolController::update(
+                        $_GET['object'],
+                        $_POST['nom'], 
+                        $_POST['description'],
+                        $_POST['points'],
+                        intval($_POST['category']),
+                        $_SESSION['user']['id']
+                        );
+                }
+                break;
+                default:
           // Requête invalide
           header("HTTP/1.0 405 Method Not Allowed");
                 break;

@@ -3,9 +3,13 @@
 /* require_once 'connect.php';
 require_once './Models/Entities/Users.php';*/
 
-class ToolManager{
+class ToolManager implements ManagerInterface{
  
-  public static function addTool(Tool $tool) {
+      /**
+     * @param Tool $tool
+     * @return T
+     */
+  public static function add($tool):bool {
     $pdo = DatabaseConnection::getConnection();
     $sql = "INSERT INTO tool (
       name, 
@@ -30,10 +34,10 @@ class ToolManager{
     $stmt->bindValue(':id_users', $tool->getUser()->getId());
     $executeBool = $stmt->execute();
     $tool->setId($pdo->lastInsertId());
-    return $executeBool ? $tool : $executeBool;
+    return $executeBool;
   }
 
-  public static function getTools() {
+  public static function getAll():array {
     $pdo = DatabaseConnection::getConnection();
     $sql = "SELECT * FROM tool";
     $toolArray = array();
@@ -47,7 +51,7 @@ class ToolManager{
   }
 
   
-  public static function getToolById(int $idTool) {
+  public static function getById(int $idTool) {
     $pdo = DatabaseConnection::getConnection();
     $sql = "SELECT * FROM tool WHERE id= :idTool" ;
     $stmt = $pdo->prepare($sql);
@@ -74,7 +78,7 @@ class ToolManager{
     return $toolArray;
   }
 
-  public static function updateTool(Tool $tool) {
+  public static function update($tool): bool {
     $pdo = DatabaseConnection::getConnection();
     $sql = "UPDATE  tool SET 
       name=:name, 
@@ -96,7 +100,7 @@ class ToolManager{
     return $executeBool ? $tool : $executeBool;
   }
   
-  static function deleteTool(int $id){
+  public static function delete(int $id):bool {
     $pdo = DatabaseConnection::getConnection();
     $sql="DELETE FROM tool WHERE (id=:id)";
     $stmt = $pdo->prepare($sql);
@@ -104,7 +108,7 @@ class ToolManager{
     $executeBool = $stmt->execute();
     // $result=$stmt->fetchAll();
     //  self::$pdo=null;
-    return $executeBool ? $id : $executeBool;
+    return $executeBool;
   }
   
   private static function createTool($array){
@@ -114,10 +118,10 @@ class ToolManager{
       $array['visual'],
       $array['description'],
       $array['points'],
-      CategoryManager::getCategoryById(
+      CategoryManager::getById(
         $array['id_category']
       ),
-      UserManager::getUserById(
+      UserManager::getById(
         ($array['id_users'])
       ) 
     );

@@ -4,14 +4,14 @@ class Category {
     private $name;
 
 
-    public function __construct($id, $name) {
+    public function __construct(int $id,string $name) {
         $this->setId($id);
         $this->setName($name);
 
     }
 
 
-    public function setId($id){
+    public function setId(int $id){
         $this->id=$id;
     }
 
@@ -19,7 +19,7 @@ class Category {
         return $this->id;
     }
 
-    public function setName($name){
+    public function setName(string $name){
         $this->name=$name;
     }
 

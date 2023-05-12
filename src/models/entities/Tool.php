@@ -19,7 +19,7 @@ class Tool {
     }
 
 
-    public function setId($id){
+    public function setId(int $id){
         $this->id=$id;
     }
 
@@ -27,7 +27,7 @@ class Tool {
         return $this->id;
     }
 
-    public function setName($name){
+    public function setName(string $name){
         $this->name=$name;
     }
 
@@ -35,7 +35,7 @@ class Tool {
         return $this->name;
     }
 
-    public function setVisual($visual){
+    public function setVisual(string $visual){
         $this->visual=$visual;
     }
 
@@ -43,7 +43,7 @@ class Tool {
         return $this->visual;
     }
 
-    public function setDescription($description){
+    public function setDescription(string $description){
         $this->description=$description;
     }
 
@@ -51,7 +51,7 @@ class Tool {
         return $this->description;
     }
 
-    public function setPoints($points){
+    public function setPoints(int $points){
         $this->points=$points;
     }
 

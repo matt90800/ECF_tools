@@ -3,19 +3,19 @@ class Lend {
     private $id;                           
     private $beginingDate;
     private $endDate;
-    private $idUser;
-    private $good;
+    private $user;
+    private $tool;
 
-    public function __construct($id, $beginingDate, $endDate, $idUser, $good) {
+    public function __construct(int $id,DateTime $beginingDate,DateTime $endDate,User $user,Tool $tool) {
         $this->setId($id);
-        $this->setBeginingDate($beginingDate;)
+        $this->setBeginingDate($beginingDate);
         $this->setEndDate($endDate);
-        $this->setGood($good);
-        $this->setIdUser($idUser);
+        $this->setTool($tool);
+        $this->setUser($user);
     }
 
 
-    public function setId($id){
+    public function setId(int $id){
         $this->id=$id;
     }
 
@@ -23,7 +23,7 @@ class Lend {
         return $this->id;
     }
 
-    public function setBeginingDate($beginingDate){
+    public function setBeginingDate(DateTime $beginingDate){
         $this->beginingDate=$beginingDate;
     }
 
@@ -31,7 +31,7 @@ class Lend {
         return $this->beginingDate;
     }
 
-    public function setEndDate($endDate){
+    public function setEndDate(DateTime $endDate){
         $this->endDate=$endDate;
     }
 
@@ -39,20 +39,20 @@ class Lend {
         return $this->endDate;
     }
 
-    public function setIdUser($idUser){
-        $this->idUser=$idUser;
+    public function setUser(User $user){
+        $this->user=$user;
     }
     
-    public function getIdUser(){
-        return $this->idUser;
+    public function getUser(){
+        return $this->user;
     }
     
-    public function setGood($good){
-        $this->good=$good;
+    public function setTool(Tool $tool){
+        $this->tool=$tool;
     }
 
-    public function getGood(){
-        return $this->good;
+    public function getTool(){
+        return $this->tool;
     }
 
 

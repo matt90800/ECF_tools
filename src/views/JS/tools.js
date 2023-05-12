@@ -33,11 +33,11 @@ const createCard = (element)=> {
     article.append(div);
 
     const update = document.createElement("form");
-    update.innerHTML=`<input type="hidden" name="object" value="<?=$id?>">
+    update.innerHTML=`<input type="hidden" name="object" value="${element.id}">
     <input type="hidden" name="action" value="update">
     <button class="btn btn-primary" type="submit">Update</button>`;
     const deletion = document.createElement("form");
-    deletion.innerHTML=`<input type="hidden" name="object" value="<?=$id?>">
+    deletion.innerHTML=`<input type="hidden" name="object" value="${element.id}">
     <input type="hidden" name="action" value="delete">
     <button class="btn btn-primary" type="submit">Delete</button>`;
 
@@ -49,24 +49,22 @@ const createCard = (element)=> {
 
 
 const fetchData = () => {
-        const url = "https://localhost/Ecf_tools/src/index.php?api=tool&id=<?=$id?>";
+        const url = "http://localhost/Ecf_tools/src/index.php?api=tool&id=<?=$id?>";
         fetch (url)
             .then(response => response.json())
             .then(json => {
                 json=json.response
                // console.error(json)
-                if (json.length>1) {
+                if (json.length>0) {
                     main.innerHTML='';
                     json.forEach(element => {
-                        console.log(element)
-                        previousURL=url;
                         main.append(createCard(element))
                     })
-                } else if(json.length==1){
-                    console.log("je passe en bas")
+                } /*else if(json.length==1){
                     main.innerHTML='';
-                    main.append(createCard(json))
-                }
+                    console.log(json);
+                    main.append(createCard(json[]))
+                } */
         })
 }
 

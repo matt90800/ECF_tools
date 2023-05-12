@@ -3,9 +3,9 @@
 /* require_once 'connect.php';
 require_once './Models/Entities/Users.php';*/
 
-class LendManager{
+class LendManager implements ManagerInterface{
  
-  public static function addLend(Lend $lend) {
+  public static function add(Lend $lend) {
     $pdo = DatabaseConnection::getConnection();
     $sql = "INSERT INTO lend (
       begining_date, 
@@ -28,7 +28,23 @@ class LendManager{
     return $lend;
   }
 
-  public static function getLends() {
+  public static function getById(int $idLend) {
+    $pdo = DatabaseConnection::getConnection();
+    $sql = "SELECT * FROM lend WHERE id= :id" ;
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $idLend);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    return $lend = new Lend(
+            $row['id'],
+            $row['begining_date'],
+            $row['end_date'],
+            $row['id_user'],
+            $row['id_good']
+      );
+  }
+
+  public static function getAll() {
     $pdo = DatabaseConnection::getConnection();
     $sql = "SELECT * FROM lend";
     $lendArray = array();
@@ -46,27 +62,12 @@ class LendManager{
     }
     return $lendArray;
   }
-  public static function getLend(int $idLend) {
-    $pdo = DatabaseConnection::getConnection();
-    $sql = "SELECT * FROM lend WHERE id= :id" ;
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':id', $idLend);
-    $stmt->execute();
-    $result = $stmt->fetch();
-    return $lend = new Lend(
-            $row['id'],
-            $row['begining_date'],
-            $row['end_date'],
-            $row['id_user'],
-            $row['id_good']
-      );
-  }
 
-  static function deleteLend(Lend $lend){
+
+  static function delete(int $id){
     $pdo = DatabaseConnection::getConnection();
     $sql="DELETE FROM lend WHERE (id=:id)";
     $stmt = $pdo->prepare($sql);
-    $id=$lend->getId();
     $stmt->bindParam(":id",$id);
     $executeBool = $stmt->execute();
     // $result=$stmt->fetchAll();
