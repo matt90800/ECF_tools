@@ -85,6 +85,7 @@ class LendManager implements ManagerInterface{
     return $executeBool;
   }
 
+  //utility entity instanciation method
   private static function createLend($array){
     return $lend = new Lend(
         $array['id'],

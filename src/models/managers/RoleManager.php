@@ -64,6 +64,7 @@ class RoleManager implements ManagerInterface{
     return $executeBool;
   }
 
+  //utility entity instanciation method
   private static function createRole($array){
     return new Role(
       $array['id'],

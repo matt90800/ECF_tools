@@ -61,7 +61,7 @@ class UserManager implements ManagerInterface{
             $registeredPassword = $user->getPassword();
             $verifiedUser = password_verify($password, $registeredPassword);
             if($verifiedUser){
-//                session_start()? print('Bienvenue') : print("Connection echouée"); //on lance la session avec session
+                //session_start()? print('Bienvenue') : print("Connection echouée"); //on lance la session avec session
                 $_SESSION['user'] = [
                     'id' => $user->getId(),
                     'name' => $user->getLastName(),
@@ -110,7 +110,8 @@ class UserManager implements ManagerInterface{
         return false;
     }
 
-      private static function createUser($array){
+    //utility entity instanciation method
+    private static function createUser($array){
         return new User(
             $array['id'],
             $array['pseudo'],

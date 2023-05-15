@@ -111,6 +111,7 @@ class ToolManager implements ManagerInterface{
     return $executeBool;
   }
   
+  //utility entity instanciation method
   private static function createTool($array){
     return new Tool(
       $array['id'],

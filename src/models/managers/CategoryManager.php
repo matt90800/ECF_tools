@@ -68,6 +68,7 @@ class CategoryManager implements ManagerInterface{
     return $executeBool;
   }
 
+  //utility entity instanciation method
   private static function createCategory($array){
     return new Category(
       $array['id'],
